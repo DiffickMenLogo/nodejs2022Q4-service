@@ -1,3 +1,4 @@
+import { FavoritesService } from './../favorites/favorites.service';
 import { UpdateTrackDto } from './../dto/UpdateTrackDto';
 import { checkUUId } from './../utils/checkUUID';
 import { Injectable } from '@nestjs/common';
@@ -8,6 +9,8 @@ import { CreateTrackDto } from 'src/dto/CreateTrackDto';
 @Injectable()
 export class TrackService {
   private tracks = [];
+
+  constructor(private readonly favoriteService: FavoritesService) {}
 
   getAllTracks(): Track[] {
     return this.tracks;
@@ -47,9 +50,11 @@ export class TrackService {
     return currentTrack;
   }
 
-  deleteTrack(id: string): string {
+  deleteTrack(id: string): Track {
+    const track = this.tracks.find((track) => track.id === id);
     const index = this.tracks.findIndex((track) => track.id === id);
     this.tracks.splice(index, 1);
-    return 'Track deleted';
+    this.favoriteService.deleteFavoriteTrack(id);
+    return track;
   }
 }

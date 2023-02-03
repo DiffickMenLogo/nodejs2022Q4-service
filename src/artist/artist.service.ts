@@ -1,3 +1,4 @@
+import { FavoritesService } from './../favorites/favorites.service';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateArtistDto } from 'src/dto/CreateArtistDto';
@@ -6,6 +7,8 @@ import { Artist } from 'src/types/types';
 @Injectable()
 export class ArtistService {
   private artists = [];
+
+  constructor(private readonly favoritesService: FavoritesService) {}
 
   getAllArtists(): Artist[] {
     return this.artists;
@@ -37,9 +40,11 @@ export class ArtistService {
     return currentArtist;
   }
 
-  deleteArtist(id: string): string {
+  deleteArtist(id: string): Artist {
+    const artist = this.artists.find((artist) => artist.id === id);
     const index = this.artists.findIndex((artist) => artist.id === id);
     this.artists.splice(index, 1);
-    return 'Artist deleted';
+    this.favoritesService.deleteFavoriteArtist(id);
+    return artist;
   }
 }

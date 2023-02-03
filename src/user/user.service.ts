@@ -54,9 +54,10 @@ export class UserService {
     }
   }
 
-  deleteUser(id: string): string {
+  deleteUser(id: string): User {
+    const user = this.users.find((user) => user.id === id);
     const index = this.users.findIndex((user) => user.id === id);
     this.users.splice(index, 1);
-    return 'User deleted';
+    return user;
   }
 }

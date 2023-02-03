@@ -2,10 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateAlbumDto } from 'src/dto/CreateAlbumDto';
 import { Album } from 'src/types/types';
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class AlbumService {
   private albums = [];
+
+  constructor(private readonly favoritesService: FavoritesService) {}
 
   getAllAlbums(): Album[] {
     return this.albums;
@@ -41,9 +44,11 @@ export class AlbumService {
     return currentAlbum;
   }
 
-  deleteAlbum(id: string): string {
+  deleteAlbum(id: string): Album {
+    const album = this.albums.find((album) => album.id === id);
     const index = this.albums.findIndex((album) => album.id === id);
     this.albums.splice(index, 1);
-    return 'Album deleted';
+    this.favoritesService.deleteFavoriteAlbum(id);
+    return album;
   }
 }
