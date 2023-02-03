@@ -8,8 +8,6 @@ import { Artist } from 'src/types/types';
 export class ArtistService {
   private artists = [];
 
-  constructor(private readonly favoritesService: FavoritesService) {}
-
   getAllArtists(): Artist[] {
     return this.artists;
   }
@@ -44,7 +42,6 @@ export class ArtistService {
     const artist = this.artists.find((artist) => artist.id === id);
     const index = this.artists.findIndex((artist) => artist.id === id);
     this.artists.splice(index, 1);
-    this.favoritesService.deleteFavoriteArtist(id);
     return artist;
   }
 }

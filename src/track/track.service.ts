@@ -10,8 +10,6 @@ import { CreateTrackDto } from 'src/dto/CreateTrackDto';
 export class TrackService {
   private tracks = [];
 
-  constructor(private readonly favoriteService: FavoritesService) {}
-
   getAllTracks(): Track[] {
     return this.tracks;
   }
@@ -54,7 +52,6 @@ export class TrackService {
     const track = this.tracks.find((track) => track.id === id);
     const index = this.tracks.findIndex((track) => track.id === id);
     this.tracks.splice(index, 1);
-    this.favoriteService.deleteFavoriteTrack(id);
     return track;
   }
 }

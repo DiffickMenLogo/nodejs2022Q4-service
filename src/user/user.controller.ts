@@ -11,7 +11,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { isUUID } from 'class-validator';
 import { CreateUserDto } from 'src/dto/CreateUserDto';
 import { UpdatePasswordDto } from 'src/dto/UpdatePasswordDto';
 import { UserService } from './user.service';

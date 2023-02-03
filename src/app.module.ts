@@ -15,7 +15,7 @@ import { TrackModule } from './track/track.module';
     AlbumModule,
     FavoritesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

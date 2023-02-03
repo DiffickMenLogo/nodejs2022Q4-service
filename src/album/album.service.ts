@@ -8,8 +8,6 @@ import { FavoritesService } from 'src/favorites/favorites.service';
 export class AlbumService {
   private albums = [];
 
-  constructor(private readonly favoritesService: FavoritesService) {}
-
   getAllAlbums(): Album[] {
     return this.albums;
   }
@@ -48,7 +46,6 @@ export class AlbumService {
     const album = this.albums.find((album) => album.id === id);
     const index = this.albums.findIndex((album) => album.id === id);
     this.albums.splice(index, 1);
-    this.favoritesService.deleteFavoriteAlbum(id);
     return album;
   }
 }
