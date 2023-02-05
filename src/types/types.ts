@@ -1,9 +1,8 @@
 import { Exclude } from 'class-transformer';
 
-class User {
+interface User {
   id: string; // uuid v4
   login: string;
-  @Exclude()
   password: string;
   version: number; // integer number, increments on update
   createdAt: number; // timestamp of creation
@@ -43,4 +42,20 @@ interface FavoritesResponse {
   tracks: Track[];
 }
 
-export { User, Artist, Track, Album, Favorites, FavoritesResponse };
+interface UserResponse {
+  id: string;
+  login: string;
+  version: number;
+  createdAt: number;
+  updatedAt: number;
+}
+
+export {
+  User,
+  Artist,
+  Track,
+  Album,
+  Favorites,
+  FavoritesResponse,
+  UserResponse,
+};

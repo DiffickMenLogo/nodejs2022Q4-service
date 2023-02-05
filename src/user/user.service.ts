@@ -8,19 +8,31 @@ import {
   Res,
 } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { User } from 'src/types/types';
+import { User, UserResponse } from 'src/types/types';
 
 @Injectable()
 export class UserService {
   private users = [];
 
-  getAllUsers(): User[] {
-    return this.users;
+  getAllUsers(): UserResponse[] {
+    return this.users.map((user) => ({
+      id: user.id,
+      login: user.login,
+      version: user.version,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    }));
   }
 
-  getUserById(id: string): User {
+  getUserById(id: string): UserResponse {
     const user = this.users.find((user) => user.id === id);
-    return user;
+    return {
+      id: user.id,
+      login: user.login,
+      version: user.version,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
   }
 
   createUser(user: CreateUserDto): User {
@@ -53,7 +65,6 @@ export class UserService {
       return currentUser;
     }
   }
-
   deleteUser(id: string): User {
     const user = this.users.find((user) => user.id === id);
     const index = this.users.findIndex((user) => user.id === id);

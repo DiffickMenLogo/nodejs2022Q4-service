@@ -1,3 +1,4 @@
+import { DeleteFavoritesMiddleware } from './../deleteFavorites.middleware';
 import { UpdateTrackDto } from './../dto/UpdateTrackDto';
 import { checkTrack } from './../utils/checkTrack';
 import { checkUUId } from './../utils/checkUUID';
@@ -7,6 +8,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -42,6 +45,7 @@ export class TrackController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   deleteTrack(@Param('id') id: string) {
     checkUUId(id);
     checkTrack(id, this.trackService);

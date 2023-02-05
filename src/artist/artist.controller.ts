@@ -6,6 +6,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Post,
   Put,
@@ -40,6 +42,7 @@ export class ArtistController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   deleteArtist(@Param('id') id: string) {
     checkUUId(id);
     checkArtist(id, this.artistService);

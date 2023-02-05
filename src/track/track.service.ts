@@ -1,7 +1,7 @@
 import { FavoritesService } from './../favorites/favorites.service';
 import { UpdateTrackDto } from './../dto/UpdateTrackDto';
 import { checkUUId } from './../utils/checkUUID';
-import { Injectable } from '@nestjs/common';
+import { HttpCode, Injectable } from '@nestjs/common';
 import { Track } from 'src/types/types';
 import { randomUUID } from 'crypto';
 import { CreateTrackDto } from 'src/dto/CreateTrackDto';
@@ -47,7 +47,6 @@ export class TrackService {
     }
     return currentTrack;
   }
-
   deleteTrack(id: string): Track {
     const track = this.tracks.find((track) => track.id === id);
     const index = this.tracks.findIndex((track) => track.id === id);
