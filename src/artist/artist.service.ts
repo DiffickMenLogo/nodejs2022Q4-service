@@ -1,13 +1,20 @@
+import { TrackService } from './../track/track.service';
 import { checkArtist } from './../utils/checkArtist';
 import { FavoritesService } from './../favorites/favorites.service';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateArtistDto } from 'src/dto/CreateArtistDto';
 import { Artist } from 'src/types/types';
+import { AlbumService } from 'src/album/album.service';
 
 @Injectable()
 export class ArtistService {
   private artists = [];
+
+  constructor(
+    private readonly albumService: AlbumService,
+    private readonly trackService: TrackService,
+  ) {}
 
   getAllArtists(): Artist[] {
     return this.artists;
@@ -43,6 +50,8 @@ export class ArtistService {
 
   deleteArtist(id: string): Artist {
     checkArtist(id, this.artists);
+    this.trackService.deleteArtistId(id);
+    this.albumService.deleteArtistId(id);
     const artist = this.artists.find((artist) => artist.id === id);
     const index = this.artists.findIndex((artist) => artist.id === id);
     this.artists.splice(index, 1);

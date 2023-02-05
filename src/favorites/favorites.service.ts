@@ -1,8 +1,22 @@
+import { AddToFavoriteDto } from './../dto/AddToFavoriteDto';
 import { AlbumService } from './../album/album.service';
 import { ArtistService } from './../artist/artist.service';
 import { TrackService } from './../track/track.service';
-import { Delete, Injectable, Post } from '@nestjs/common';
-import { Artist, Favorites, FavoritesResponse } from 'src/types/types';
+import {
+  Delete,
+  HttpCode,
+  Injectable,
+  Post,
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
+import {
+  Artist,
+  Favorites,
+  FavoritesResponse,
+  Track,
+  Album,
+} from 'src/types/types';
 
 @Injectable()
 export class FavoritesService {
@@ -18,15 +32,38 @@ export class FavoritesService {
     albums: [],
   };
 
-  getAllFavorites(): Favorites {
-    return this.favorites;
+  getAllFavorites(): FavoritesResponse {
+    const favoritesTracks = this.favorites.tracks.map((trackId) =>
+      this.trackService.getTrackById(trackId),
+    );
+    const favoritesArtists = this.favorites.artists.map((artistId) => {
+      return this.artistService.getArtistById(artistId);
+    });
+    const favoritesAlbums = this.favorites.albums.map((albumId) => {
+      return this.albumService.getAlbumById(albumId);
+    });
+    return {
+      tracks: favoritesTracks,
+      artists: favoritesArtists,
+      albums: favoritesAlbums,
+    };
   }
 
   @Post(':id')
   createFavoriteTrack(id: string): Favorites {
     const track = this.trackService.getTrackById(id);
-    this.favorites.tracks.push(track.id);
-    return this.favorites;
+    if (!track) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: 'Track not found',
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    } else {
+      this.favorites.tracks.push(track.id);
+      return this.favorites;
+    }
   }
 
   @Delete(':id')
@@ -40,8 +77,18 @@ export class FavoritesService {
   @Post(':id')
   createFavoriteArtist(id: string): Favorites {
     const artist = this.artistService.getArtistById(id);
-    this.favorites.artists.push(artist.id);
-    return this.favorites;
+    if (!artist) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: 'Artist not found',
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    } else {
+      this.favorites.artists.push(artist.id);
+      return this.favorites;
+    }
   }
 
   @Delete(':id')
@@ -55,8 +102,18 @@ export class FavoritesService {
   @Post(':id')
   createFavoriteAlbum(id: string): Favorites {
     const album = this.albumService.getAlbumById(id);
-    this.favorites.albums.push(album.id);
-    return this.favorites;
+    if (!album) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: 'Album not found',
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    } else {
+      this.favorites.albums.push(album.id);
+      return this.favorites;
+    }
   }
 
   @Delete(':id')

@@ -53,4 +53,20 @@ export class TrackService {
     this.tracks.splice(index, 1);
     return track;
   }
+
+  deleteArtistId(id: string): void {
+    this.tracks.forEach((track) => {
+      if (track.artistId === id) {
+        track.artistId = null;
+      }
+    });
+  }
+
+  deleteAlbumId(id: string): void {
+    this.tracks.forEach((track) => {
+      if (track.albumId === id) {
+        track.albumId = null;
+      }
+    });
+  }
 }

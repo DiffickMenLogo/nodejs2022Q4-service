@@ -4,10 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateAlbumDto } from 'src/dto/CreateAlbumDto';
 import { Album } from 'src/types/types';
+import { TrackService } from 'src/track/track.service';
 
 @Injectable()
 export class AlbumService {
   private albums = [];
+
+  constructor(private readonly trackService: TrackService) {}
 
   getAllAlbums(): Album[] {
     return this.albums;
@@ -47,9 +50,18 @@ export class AlbumService {
 
   deleteAlbum(id: string): Album {
     checkAlbum(id, this.albums);
+    this.trackService.deleteAlbumId(id);
     const album = this.albums.find((album) => album.id === id);
     const index = this.albums.findIndex((album) => album.id === id);
     this.albums.splice(index, 1);
     return album;
+  }
+
+  deleteArtistId(id: string): void {
+    this.albums.forEach((album) => {
+      if (album.artistId === id) {
+        album.artistId = null;
+      }
+    });
   }
 }
