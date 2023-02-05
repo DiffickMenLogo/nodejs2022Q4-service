@@ -1,8 +1,9 @@
+import { UpdateAlbumDto } from './../dto/UpdateAlbumDto';
+import { checkAlbum } from 'src/utils/checkAlbum';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateAlbumDto } from 'src/dto/CreateAlbumDto';
 import { Album } from 'src/types/types';
-import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class AlbumService {
@@ -13,6 +14,7 @@ export class AlbumService {
   }
 
   getAlbumById(id: string): Album {
+    checkAlbum(id, this.albums);
     const album = this.albums.find((album) => album.id === id);
     return album;
   }
@@ -28,7 +30,8 @@ export class AlbumService {
     return newAlbum;
   }
 
-  updateAlbum(id: string, album: CreateAlbumDto): Album {
+  updateAlbum(id: string, album: UpdateAlbumDto): Album {
+    checkAlbum(id, this.albums);
     const currentAlbum = this.albums.find((album) => album.id === id);
     if (album.name) {
       currentAlbum.name = album.name;
@@ -43,6 +46,7 @@ export class AlbumService {
   }
 
   deleteAlbum(id: string): Album {
+    checkAlbum(id, this.albums);
     const album = this.albums.find((album) => album.id === id);
     const index = this.albums.findIndex((album) => album.id === id);
     this.albums.splice(index, 1);
