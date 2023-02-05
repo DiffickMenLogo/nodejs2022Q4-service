@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { UserService } from './../user/user.service';
-export const checkUser = (id: string, userService: UserService) => {
-  if (!userService.getUserById(id)) {
+import { User } from 'src/types/types';
+export const checkUser = (id: string, users: User[]) => {
+  if (users.find((user) => user.id === id) === undefined) {
     throw new HttpException(
       {
         status: HttpStatus.NOT_FOUND,

@@ -1,4 +1,3 @@
-import { checkUser } from './../utils/checkUser';
 import { checkUUId } from './../utils/checkUUID';
 import {
   Body,
@@ -28,7 +27,6 @@ export class UserController {
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     checkUUId(id);
-    checkUser(id, this.userService);
     return this.userService.getUserById(id);
   }
 
@@ -40,7 +38,6 @@ export class UserController {
   @Put(':id')
   updateUser(@Param('id') id: string, @Body() body: UpdatePasswordDto) {
     checkUUId(id);
-    checkUser(id, this.userService);
     return this.userService.updateUser(id, body);
   }
 
@@ -48,7 +45,6 @@ export class UserController {
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteUser(@Param('id') id: string) {
     checkUUId(id);
-    checkUser(id, this.userService);
     return this.userService.deleteUser(id);
   }
 }
