@@ -1,8 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ArtistService } from './../artist/artist.service';
-export const checkArtist = (id: string, artistService: ArtistService) => {
-  const artist = artistService.getArtistById(id);
-  if (!artistService.getArtistById(id)) {
+import { Artist } from 'src/types/types';
+export const checkArtist = (id: string, artists: Artist[]) => {
+  if (artists.find((artist) => artist.id === id) === undefined) {
     throw new HttpException(
       {
         status: HttpStatus.NOT_FOUND,

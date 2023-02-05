@@ -1,3 +1,4 @@
+import { UpdateAlbumDto } from './../dto/UpdateAlbumDto';
 import { CreateAlbumDto } from './../dto/CreateAlbumDto';
 import { AlbumService } from './album.service';
 import {
@@ -34,7 +35,7 @@ export class AlbumController {
   }
 
   @Put(':id')
-  updateAlbum(@Param('id') id: string, @Body() body) {
+  updateAlbum(@Param('id') id: string, @Body() body: UpdateAlbumDto) {
     checkUUId(id);
 
     return this.albumService.updateAlbum(id, body);

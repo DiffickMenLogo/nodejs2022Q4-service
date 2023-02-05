@@ -1,3 +1,4 @@
+import { checkArtist } from './../utils/checkArtist';
 import { FavoritesService } from './../favorites/favorites.service';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
@@ -13,6 +14,7 @@ export class ArtistService {
   }
 
   getArtistById(id: string): Artist {
+    checkArtist(id, this.artists);
     const artist = this.artists.find((artist) => artist.id === id);
     return artist;
   }
@@ -28,6 +30,7 @@ export class ArtistService {
   }
 
   updateArtist(id: string, body): Artist {
+    checkArtist(id, this.artists);
     const currentArtist = this.artists.find((artist) => artist.id === id);
     if (body.name) {
       currentArtist.name = body.name;
@@ -39,6 +42,7 @@ export class ArtistService {
   }
 
   deleteArtist(id: string): Artist {
+    checkArtist(id, this.artists);
     const artist = this.artists.find((artist) => artist.id === id);
     const index = this.artists.findIndex((artist) => artist.id === id);
     this.artists.splice(index, 1);

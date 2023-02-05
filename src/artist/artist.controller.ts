@@ -1,4 +1,4 @@
-import { checkArtist } from './../utils/checkArtist';
+import { UpdateArtistDto } from './../dto/UpdateArtistDto';
 import { checkUUId } from './../utils/checkUUID';
 import { ArtistService } from './artist.service';
 import {
@@ -25,19 +25,17 @@ export class ArtistController {
   @Get(':id')
   getArtistById(@Param('id') id: string) {
     checkUUId(id);
-    checkArtist(id, this.artistService);
     return this.artistService.getArtistById(id);
   }
 
   @Post()
-  createArtist(body: CreateArtistDto) {
+  createArtist(@Body() body: CreateArtistDto) {
     return this.artistService.createArtist(body);
   }
 
   @Put(':id')
-  updateArtist(@Param('id') id: string, @Body() body) {
+  updateArtist(@Param('id') id: string, @Body() body: UpdateArtistDto) {
     checkUUId(id);
-    checkArtist(id, this.artistService);
     return this.artistService.updateArtist(id, body);
   }
 
@@ -45,7 +43,6 @@ export class ArtistController {
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteArtist(@Param('id') id: string) {
     checkUUId(id);
-    checkArtist(id, this.artistService);
     return this.artistService.deleteArtist(id);
   }
 }
