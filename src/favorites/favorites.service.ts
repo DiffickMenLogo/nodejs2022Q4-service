@@ -33,14 +33,16 @@ export class FavoritesService {
   };
 
   getAllFavorites(): FavoritesResponse {
-    const favoritesTracks = this.favorites.tracks.map((trackId) =>
-      this.trackService.getTrackById(trackId),
-    );
-    const favoritesArtists = this.favorites.artists.map((artistId) => {
-      return this.artistService.getArtistById(artistId);
+    const favoritesTracks = this.trackService.getAllTracks().filter((track) => {
+      return this.favorites.tracks.includes(track.id);
     });
-    const favoritesAlbums = this.favorites.albums.map((albumId) => {
-      return this.albumService.getAlbumById(albumId);
+    const favoritesArtists = this.artistService
+      .getAllArtists()
+      .filter((artist) => {
+        return this.favorites.artists.includes(artist.id);
+      });
+    const favoritesAlbums = this.albumService.getAllAlbums().filter((album) => {
+      return this.favorites.albums.includes(album.id);
     });
     return {
       tracks: favoritesTracks,
@@ -51,7 +53,8 @@ export class FavoritesService {
 
   @Post(':id')
   createFavoriteTrack(id: string): Favorites {
-    const track = this.trackService.getTrackById(id);
+    const tracks = this.trackService.getAllTracks();
+    const track = tracks.find((track) => track.id === id);
     if (!track) {
       throw new HttpException(
         {
@@ -76,7 +79,8 @@ export class FavoritesService {
 
   @Post(':id')
   createFavoriteArtist(id: string): Favorites {
-    const artist = this.artistService.getArtistById(id);
+    const artists = this.artistService.getAllArtists();
+    const artist = artists.find((artist) => artist.id === id);
     if (!artist) {
       throw new HttpException(
         {
@@ -101,7 +105,8 @@ export class FavoritesService {
 
   @Post(':id')
   createFavoriteAlbum(id: string): Favorites {
-    const album = this.albumService.getAlbumById(id);
+    const albums = this.albumService.getAllAlbums();
+    const album = albums.find((album) => album.id === id);
     if (!album) {
       throw new HttpException(
         {
