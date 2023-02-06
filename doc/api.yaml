@@ -95,15 +95,15 @@ components:
         artists:
           type: array
           items:
-            $ref: '#/components/schemas/Artist'
+            $ref: '#/src/types/types.ts'
         albums:
           type: array
           items:
-            $ref: '#/components/schemas/Album'
+            $ref: '#/src/types/types.ts'
         tracks:
           type: array
           items:
-            $ref: '#/components/schemas/Track'
+            $ref: '#/src/types/types.ts'
 
 paths:
   /users:
@@ -120,7 +120,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: '#/src/types/types.ts'
     post:
       tags:
         - Users
@@ -149,7 +149,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. body does not contain required fields
   /users/{userId}:
@@ -170,7 +170,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. userId is invalid (not uuid)
         404:
@@ -255,7 +255,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Track'
+                  $ref: '#/src/types/types.ts'
     post:
       tags:
         - Track
@@ -288,7 +288,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Track'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. body does not contain required fields
   /tracks/{id}:
@@ -310,7 +310,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Track'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. trackId is invalid (not uuid)
         404:
@@ -403,7 +403,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Album'
+                  $ref: '#/src/types/types.ts'
     post:
       tags:
         - Album
@@ -434,7 +434,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Album'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. body does not contain required fields
   /albums/{id}:
@@ -456,7 +456,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Album'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. albumId is invalid (not uuid)
         404:
@@ -491,7 +491,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Album'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. albumId is invalid (not uuid)
         404:
@@ -522,7 +522,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Artist'
+                  $ref: '#/src/types/types.ts'
     post:
       tags:
         - Artist
@@ -548,7 +548,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Artist'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. body does not contain required fields
   /artists/{id}:
@@ -570,7 +570,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Artist'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. artistId is invalid (not uuid)
         404:
@@ -600,7 +600,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Artist'
+                $ref: '#/src/types/types.ts'
         400:
           description: Bad request. artistId is invalid (not uuid)
         404:
@@ -629,7 +629,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Favorites'
+                $ref: '#/src/types/types.ts'
   /favs/track/{id}:
     parameters:
       - name: id
