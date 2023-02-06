@@ -1,12 +1,5 @@
 import { CreateUserDto } from './../dto/CreateUserDto';
-import {
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { User, UserResponse } from 'src/types/types';
 import { checkUser } from 'src/utils/checkUser';

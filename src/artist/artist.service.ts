@@ -6,6 +6,7 @@ import { randomUUID } from 'crypto';
 import { CreateArtistDto } from 'src/dto/CreateArtistDto';
 import { Artist } from 'src/types/types';
 import { AlbumService } from 'src/album/album.service';
+import { UpdateArtistDto } from 'src/dto/UpdateArtistDto';
 
 @Injectable()
 export class ArtistService {
@@ -36,14 +37,16 @@ export class ArtistService {
     return newArtist;
   }
 
-  updateArtist(id: string, body): Artist {
+  updateArtist(id: string, body: UpdateArtistDto): Artist {
     checkArtist(id, this.artists);
     const currentArtist = this.artists.find((artist) => artist.id === id);
     if (body.name) {
       currentArtist.name = body.name;
+      console.log(currentArtist.name);
     }
-    if (body.grammy) {
+    if (typeof body.grammy === 'boolean') {
       currentArtist.grammy = body.grammy;
+      console.log(currentArtist.grammy);
     }
     return currentArtist;
   }

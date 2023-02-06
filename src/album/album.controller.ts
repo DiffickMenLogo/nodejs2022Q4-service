@@ -37,7 +37,6 @@ export class AlbumController {
   @Put(':id')
   updateAlbum(@Param('id') id: string, @Body() body: UpdateAlbumDto) {
     checkUUId(id);
-
     return this.albumService.updateAlbum(id, body);
   }
 

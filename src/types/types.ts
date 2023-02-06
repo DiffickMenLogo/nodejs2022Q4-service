@@ -1,5 +1,3 @@
-import { Exclude } from 'class-transformer';
-
 interface User {
   id: string; // uuid v4
   login: string;
