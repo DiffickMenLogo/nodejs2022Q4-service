@@ -1,5 +1,5 @@
-import { UpdateAlbumDto } from './../dto/UpdateAlbumDto';
-import { CreateAlbumDto } from './../dto/CreateAlbumDto';
+import { UpdateAlbumDto } from './dto/UpdateAlbumDto';
+import { CreateAlbumDto } from './dto/CreateAlbumDto';
 import { AlbumService } from './album.service';
 import {
   Body,

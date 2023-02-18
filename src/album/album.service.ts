@@ -1,8 +1,10 @@
-import { UpdateAlbumDto } from './../dto/UpdateAlbumDto';
+import { AlbumEntity } from './entities/album.entity';
+import { Repository } from 'typeorm';
+import { UpdateAlbumDto } from './dto/UpdateAlbumDto';
 import { checkAlbum } from 'src/utils/checkAlbum';
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { CreateAlbumDto } from 'src/dto/CreateAlbumDto';
+import { CreateAlbumDto } from 'src/album/dto/CreateAlbumDto';
 import { Album } from 'src/types/types';
 import { TrackService } from 'src/track/track.service';
 
@@ -10,32 +12,58 @@ import { TrackService } from 'src/track/track.service';
 export class AlbumService {
   private albums = [];
 
-  constructor(private readonly trackService: TrackService) {}
+  constructor(
+    private readonly trackService: TrackService,
+    private albumRepository: Repository<AlbumEntity>,
+  ) {}
 
-  getAllAlbums(): Album[] {
-    return this.albums;
+  async getAllAlbums(): Promise<Album[]> {
+    const albums = await this.albumRepository.find();
+    return albums.map((album) => album.toResponse());
   }
 
-  getAlbumById(id: string): Album {
-    checkAlbum(id, this.albums);
-    const album = this.albums.find((album) => album.id === id);
-    return album;
+  async getAlbumById(albumId: string): Promise<Album> {
+    const album = await this.albumRepository.findOne({
+      where: { id: albumId },
+    });
+
+    if (!album) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Album not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (album) return album.toResponse();
   }
 
-  createAlbum(album: CreateAlbumDto): Album {
+  async createAlbum(album: CreateAlbumDto): Promise<Album> {
     const newAlbum = {
       id: randomUUID(),
       name: album.name,
       artistId: album.artistId ? album.artistId : null,
       year: album.year,
     };
-    this.albums.push(newAlbum);
-    return newAlbum;
+    const createdAlbum = this.albumRepository.create(newAlbum);
+    return (await this.albumRepository.save(createdAlbum)).toResponse();
   }
 
-  updateAlbum(id: string, album: UpdateAlbumDto): Album {
-    checkAlbum(id, this.albums);
-    const currentAlbum = this.albums.find((album) => album.id === id);
+  async updateAlbum(albumId: string, album: UpdateAlbumDto): Promise<Album> {
+    const currentAlbum = await this.albumRepository.findOne({
+      where: { id: albumId },
+    });
+    if (!currentAlbum) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Album not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
     if (album.name) {
       currentAlbum.name = album.name;
     }
@@ -45,23 +73,38 @@ export class AlbumService {
     if (album.year) {
       currentAlbum.year = album.year;
     }
-    return currentAlbum;
+    if (currentAlbum) {
+      return await this.albumRepository.save(currentAlbum);
+    }
   }
 
-  deleteAlbum(id: string): Album {
-    checkAlbum(id, this.albums);
-    this.trackService.deleteAlbumId(id);
-    const album = this.albums.find((album) => album.id === id);
-    const index = this.albums.findIndex((album) => album.id === id);
-    this.albums.splice(index, 1);
-    return album;
+  async deleteAlbum(albumId: string): Promise<string> {
+    const album = this.albumRepository.findOne({ where: { id: albumId } });
+    if (!album) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Album not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    this.trackService.deleteAlbumId(albumId);
+
+    await this.albumRepository.delete(albumId);
+
+    return 'Album deleted';
   }
 
-  deleteArtistId(id: string): void {
-    this.albums.forEach((album) => {
-      if (album.artistId === id) {
-        album.artistId = null;
-      }
+  async deleteArtistId(albumId: string): Promise<void> {
+    const findedAlbums = await this.albumRepository.find({
+      where: { id: albumId },
     });
+    if (findedAlbums.length > 0) {
+      findedAlbums.map((album) => {
+        album.artistId = null;
+      });
+    }
+    await this.albumRepository.save(findedAlbums);
   }
 }

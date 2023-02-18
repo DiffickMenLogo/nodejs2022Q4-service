@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Album } from 'src/types/types';
-import { AlbumService } from './../album/album.service';
 
 export const checkAlbum = (id: string, albums: Album[]) => {
   if (albums.find((album) => album.id === id) === undefined) {
