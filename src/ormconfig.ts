@@ -1,3 +1,6 @@
+import { TrackEntity } from './track/entities/track.entity';
+import { FavoritesEntity } from './favorites/entities/favorites.entity';
+import { ArtistEntity } from './artist/entities/artist.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
 import * as dotenv from 'dotenv';
 import { DataSourceOptions } from 'typeorm';
@@ -13,7 +16,13 @@ export default {
   password: process.env.POSTGRES_PASSWORD as string,
   database: process.env.POSTGRES_DATABASE as string,
   synchronize: false,
-  entities: [UserEntity, AlbumEntity],
+  entities: [
+    UserEntity,
+    AlbumEntity,
+    ArtistEntity,
+    FavoritesEntity,
+    TrackEntity,
+  ],
   migrations: [],
   migrationRun: true,
 } as DataSourceOptions;

@@ -1,6 +1,5 @@
 import { DeleteFavoritesMiddleware } from './../deleteFavorites.middleware';
-import { UpdateTrackDto } from './../dto/UpdateTrackDto';
-import { checkTrack } from './../utils/checkTrack';
+import { UpdateTrackDto } from './dto/UpdateTrackDto';
 import { checkUUId } from './../utils/checkUUID';
 import { TrackService } from './track.service';
 import {
@@ -14,7 +13,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateTrackDto } from 'src/dto/CreateTrackDto';
+import { CreateTrackDto } from 'src/track/dto/CreateTrackDto';
 
 @Controller('track')
 export class TrackController {
@@ -28,7 +27,6 @@ export class TrackController {
   @Get(':id')
   async getTrackById(@Param('id') id: string) {
     checkUUId(id);
-    checkTrack(id, this.trackService);
     return this.trackService.getTrackById(id);
   }
 
@@ -40,7 +38,6 @@ export class TrackController {
   @Put(':id')
   updateTrack(@Param('id') id: string, @Body() body: UpdateTrackDto) {
     checkUUId(id);
-    checkTrack(id, this.trackService);
     return this.trackService.updateTrack(id, body);
   }
 
@@ -48,7 +45,6 @@ export class TrackController {
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteTrack(@Param('id') id: string) {
     checkUUId(id);
-    checkTrack(id, this.trackService);
     return this.trackService.deleteTrack(id);
   }
 }

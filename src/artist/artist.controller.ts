@@ -1,4 +1,4 @@
-import { UpdateArtistDto } from './../dto/UpdateArtistDto';
+import { UpdateArtistDto } from './dto/UpdateArtistDto';
 import { checkUUId } from './../utils/checkUUID';
 import { ArtistService } from './artist.service';
 import {
@@ -12,7 +12,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateArtistDto } from 'src/dto/CreateArtistDto';
+import { CreateArtistDto } from 'src/artist/dto/CreateArtistDto';
 
 @Controller('artist')
 export class ArtistController {

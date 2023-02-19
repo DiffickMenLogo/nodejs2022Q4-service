@@ -1,12 +1,13 @@
+import { Repository } from 'typeorm';
 import { TrackService } from './../track/track.service';
-import { checkArtist } from './../utils/checkArtist';
-import { FavoritesService } from './../favorites/favorites.service';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
-import { CreateArtistDto } from 'src/dto/CreateArtistDto';
+import { CreateArtistDto } from 'src/artist/dto/CreateArtistDto';
 import { Artist } from 'src/types/types';
 import { AlbumService } from 'src/album/album.service';
-import { UpdateArtistDto } from 'src/dto/UpdateArtistDto';
+import { UpdateArtistDto } from 'src/artist/dto/UpdateArtistDto';
+import { ArtistEntity } from './entities/artist.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class ArtistService {
@@ -15,31 +16,56 @@ export class ArtistService {
   constructor(
     private readonly albumService: AlbumService,
     private readonly trackService: TrackService,
+    @InjectRepository(ArtistEntity)
+    private artistRepository: Repository<ArtistEntity>,
   ) {}
 
-  getAllArtists(): Artist[] {
-    return this.artists;
+  async getAllArtists(): Promise<Artist[]> {
+    const artists = await this.artistRepository.find();
+    return artists.map((artist) => artist.toResponse());
   }
 
-  getArtistById(id: string): Artist {
-    checkArtist(id, this.artists);
-    const artist = this.artists.find((artist) => artist.id === id);
-    return artist;
+  async getArtistById(artistId: string): Promise<Artist> {
+    const artist = await this.artistRepository.findOne({
+      where: { id: artistId },
+    });
+
+    if (!artist) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Artist not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (artist) return artist.toResponse();
   }
 
-  createArtist(body: CreateArtistDto): Artist {
+  async createArtist(body: CreateArtistDto): Promise<Artist> {
     const newArtist = {
       id: randomUUID(),
       name: body.name,
       grammy: body.grammy,
     };
-    this.artists.push(newArtist);
-    return newArtist;
+    const createdArtist = await this.artistRepository.create(newArtist);
+    return (await this.artistRepository.save(createdArtist)).toResponse();
   }
 
-  updateArtist(id: string, body: UpdateArtistDto): Artist {
-    checkArtist(id, this.artists);
-    const currentArtist = this.artists.find((artist) => artist.id === id);
+  async updateArtist(artistId: string, body: UpdateArtistDto): Promise<Artist> {
+    const currentArtist = await this.artistRepository.findOne({
+      where: { id: artistId },
+    });
+    if (!currentArtist) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Artist not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
     if (body.name) {
       currentArtist.name = body.name;
       console.log(currentArtist.name);
@@ -48,16 +74,25 @@ export class ArtistService {
       currentArtist.grammy = body.grammy;
       console.log(currentArtist.grammy);
     }
-    return currentArtist;
+    return await this.artistRepository.save(currentArtist);
   }
 
-  deleteArtist(id: string): Artist {
-    checkArtist(id, this.artists);
-    this.trackService.deleteArtistId(id);
-    this.albumService.deleteArtistId(id);
-    const artist = this.artists.find((artist) => artist.id === id);
-    const index = this.artists.findIndex((artist) => artist.id === id);
-    this.artists.splice(index, 1);
+  async deleteArtist(artistId: string): Promise<Artist> {
+    const artist = this.artistRepository.findOne({ where: { id: artistId } });
+
+    if (!artist) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: 'Artist not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    await this.artistRepository.delete(artistId);
+    await this.trackService.deleteArtistId(artistId);
+    await this.albumService.deleteArtistId(artistId);
+
     return artist;
   }
 }

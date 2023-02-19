@@ -7,7 +7,7 @@ import { Module } from '@nestjs/common';
 import { AlbumController } from './album.controller';
 
 @Module({
-  imports: [TrackModule, TypeOrmModule.forFeature([AlbumEntity])],
+  imports: [TypeOrmModule.forFeature([AlbumEntity]), TrackModule],
   controllers: [AlbumController],
   providers: [AlbumService],
   exports: [AlbumService],

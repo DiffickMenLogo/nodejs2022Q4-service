@@ -1,7 +1,7 @@
 import { Column, Entity } from 'typeorm';
 
-@Entity()
-export class Favorites {
+@Entity('favorites')
+export class FavoritesEntity {
   @Column()
   artists: string[];
 

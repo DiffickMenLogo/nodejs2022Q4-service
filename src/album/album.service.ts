@@ -1,20 +1,19 @@
 import { AlbumEntity } from './entities/album.entity';
 import { Repository } from 'typeorm';
 import { UpdateAlbumDto } from './dto/UpdateAlbumDto';
-import { checkAlbum } from 'src/utils/checkAlbum';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateAlbumDto } from 'src/album/dto/CreateAlbumDto';
 import { Album } from 'src/types/types';
 import { TrackService } from 'src/track/track.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class AlbumService {
-  private albums = [];
-
   constructor(
-    private readonly trackService: TrackService,
+    @InjectRepository(AlbumEntity)
     private albumRepository: Repository<AlbumEntity>,
+    private readonly trackService: TrackService,
   ) {}
 
   async getAllAlbums(): Promise<Album[]> {
