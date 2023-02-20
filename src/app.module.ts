@@ -10,14 +10,14 @@ import { AppService } from './app.service';
 import { SwaggerModule } from '@nestjs/swagger';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import configService from './ormconfig';
+import { dataSourceOptions } from './ormconfig';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '../.env',
     }),
-    TypeOrmModule.forRoot(configService),
+    TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
     TrackModule,
     ArtistModule,

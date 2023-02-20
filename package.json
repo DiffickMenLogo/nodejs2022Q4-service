@@ -18,7 +18,15 @@
     "test:auth": "cross-env TEST_MODE=auth jest --config ./test/jest-e2e.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/ormconfig.ts",
+    "typeorm:migration": "ts-node ./node_modules/typeorm/cli migration:run -d src/ormconfig.ts",
+    "typeorm:generate": "ts-node ./node_modules/typeorm/cli migration:generate ./src/migrations/update-post-table -d ./src/ormconfig.ts",
+    "typeorm:create": "ts-node ./node_modules/typeorm/cli migration:create ./src/migrations/update-post-table",
+    "typeorm:drop": "ts-node ./node_modules/typeorm/cli schema:drop -d src/ormconfig.ts",
+    "start:docker": "docker compose up --build",
+    "scan:app": "docker scan diffick/app",
+    "scan:db": "docker scan diffick/db"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
@@ -39,7 +47,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.6.0",
-    "typeorm": "^0.3.12",
+    "typeorm": "^0.3.11",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
