@@ -63,7 +63,7 @@ export class TrackService {
       where: { id: trackId },
     });
 
-    if (!track) {
+    if (!currentTrack) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,
@@ -89,7 +89,9 @@ export class TrackService {
   }
 
   async deleteTrack(trackId: string): Promise<string> {
-    const track = this.trackRepository.findOne({ where: { id: trackId } });
+    const track = await this.trackRepository.findOne({
+      where: { id: trackId },
+    });
 
     if (!track) {
       throw new HttpException(

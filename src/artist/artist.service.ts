@@ -1,6 +1,12 @@
 import { Repository } from 'typeorm';
 import { TrackService } from './../track/track.service';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { CreateArtistDto } from 'src/artist/dto/CreateArtistDto';
 import { Artist } from 'src/types/types';
@@ -68,17 +74,20 @@ export class ArtistService {
     }
     if (body.name) {
       currentArtist.name = body.name;
-      console.log(currentArtist.name);
     }
     if (typeof body.grammy === 'boolean') {
       currentArtist.grammy = body.grammy;
-      console.log(currentArtist.grammy);
     }
     return await this.artistRepository.save(currentArtist);
   }
 
-  async deleteArtist(artistId: string): Promise<Artist> {
-    const artist = this.artistRepository.findOne({ where: { id: artistId } });
+  async deleteArtist(artistId: string): Promise<string> {
+    const artist = await this.artistRepository.findOne({
+      where: { id: artistId },
+    });
+    await this.artistRepository.delete(artistId);
+    await this.trackService.deleteArtistId(artistId);
+    await this.albumService.deleteArtistId(artistId);
 
     if (!artist) {
       throw new HttpException(
@@ -89,10 +98,7 @@ export class ArtistService {
         HttpStatus.NOT_FOUND,
       );
     }
-    await this.artistRepository.delete(artistId);
-    await this.trackService.deleteArtistId(artistId);
-    await this.albumService.deleteArtistId(artistId);
 
-    return artist;
+    return 'Artist deleted';
   }
 }

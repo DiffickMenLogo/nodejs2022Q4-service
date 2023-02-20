@@ -1,13 +1,21 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('favorites')
 export class FavoritesEntity {
-  @Column()
-  artists: string[];
+  @PrimaryGeneratedColumn('uuid')
+  id: string; //create this because pg cant start without primary key
 
   @Column()
-  albums: string[];
+  artist: string;
 
   @Column()
-  tracks: string[];
+  album: string;
+
+  @Column()
+  track: string;
+
+  toResponse() {
+    const { artist, album, track } = this;
+    return { artist, album, track };
+  }
 }

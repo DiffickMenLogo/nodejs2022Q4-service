@@ -77,7 +77,7 @@ export class UserService {
     }
   }
   async deleteUser(userId: string): Promise<string> {
-    const user = this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new HttpException(
         {

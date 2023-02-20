@@ -78,7 +78,9 @@ export class AlbumService {
   }
 
   async deleteAlbum(albumId: string): Promise<string> {
-    const album = this.albumRepository.findOne({ where: { id: albumId } });
+    const album = await this.albumRepository.findOne({
+      where: { id: albumId },
+    });
     if (!album) {
       throw new HttpException(
         {
@@ -88,7 +90,7 @@ export class AlbumService {
         HttpStatus.NOT_FOUND,
       );
     }
-    this.trackService.deleteAlbumId(albumId);
+    await this.trackService.deleteAlbumId(albumId);
 
     await this.albumRepository.delete(albumId);
 
@@ -96,14 +98,11 @@ export class AlbumService {
   }
 
   async deleteArtistId(albumId: string): Promise<void> {
-    const findedAlbums = await this.albumRepository.find({
-      where: { id: albumId },
-    });
-    if (findedAlbums.length > 0) {
-      findedAlbums.map((album) => {
+    (await this.albumRepository.find({ where: { artistId: albumId } })).map(
+      (album) => {
         album.artistId = null;
-      });
-    }
-    await this.albumRepository.save(findedAlbums);
+        this.albumRepository.save(album);
+      },
+    );
   }
 }
