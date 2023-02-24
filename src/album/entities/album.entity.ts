@@ -8,10 +8,10 @@ export class AlbumEntity {
   @Column()
   name: string;
 
-  @Column()
-  artistId: string | null;
+  @Column({ nullable: true })
+  artistId: string;
 
-  @Column()
+  @Column({ nullable: true })
   year: number;
 
   toResponse() {

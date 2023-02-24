@@ -5,13 +5,13 @@ export class FavoritesEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string; //create this because pg cant start without primary key
 
-  @Column()
+  @Column({ nullable: true })
   artist: string;
 
-  @Column()
+  @Column({ nullable: true })
   album: string;
 
-  @Column()
+  @Column({ nullable: true })
   track: string;
 
   toResponse() {
