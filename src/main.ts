@@ -1,3 +1,4 @@
+import { HttpExceptionFilter } from './exFilters/HttpExceptionFilter';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 4000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalFilters(new HttpExceptionFilter());
   const source = await readFile(
     join(dirname(__dirname), 'doc/api.yaml'),
     'utf8',
