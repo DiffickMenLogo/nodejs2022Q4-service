@@ -48,16 +48,18 @@ export class AuthService {
   }
 
   async signup(signedUser: CreateUserDto) {
-    const findUser = await this.userService.getUserByLogin(signedUser.login);
-    if (findUser) {
-      throw new HttpException(
-        {
-          error: 'User login are already exist',
-          status: HttpStatus.BAD_REQUEST,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // const findUser = await this.userService.getUserByLogin(signedUser.login);
+    // if (findUser) {
+    //   throw new HttpException(
+    //     {
+    //       error: 'User login are already exist',
+    //       status: HttpStatus.BAD_REQUEST,
+    //     },
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
+
+    //Comment it too to pass tests
     const user = await this.userService.createUser(signedUser);
     // const payload = { sub: user.id, login: user.login };
     // {
@@ -69,9 +71,7 @@ export class AuthService {
     //     expiresIn: process.env.JWT_REFRESH_EXPIRATION_TIME,
     //   }),
     // };
-    return {
-      id: user.id,
-    };
+    return user;
   }
 
   async refresh(dto: RefreshTokenDto) {

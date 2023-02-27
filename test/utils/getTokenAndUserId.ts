@@ -13,14 +13,6 @@ const getTokenAndUserId = async (request) => {
     .post(authRoutes.signup)
     .set('Accept', 'application/json')
     .send(createUserDto);
-
-  console.log(
-    await request
-      .post(authRoutes.signup)
-      .set('Accept', 'application/json')
-      .send(createUserDto),
-  );
-
   // get token
   const {
     body: { accessToken },
@@ -30,7 +22,9 @@ const getTokenAndUserId = async (request) => {
     .send(createUserDto);
 
   if (mockUserId === undefined || accessToken === undefined) {
-    throw new Error('Authorization is not implemented');
+    throw new Error(
+      `Authorization is not implemented id:${mockUserId} accsess:${accessToken}`,
+    );
   }
 
   const token = `Bearer ${accessToken}`;

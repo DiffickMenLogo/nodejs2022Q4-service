@@ -16,8 +16,6 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalFilters(new HttpExceptionFilter());
-
   const source = await readFile(
     join(dirname(__dirname), 'doc/api.yaml'),
     'utf8',
@@ -37,6 +35,8 @@ async function bootstrap() {
   await app.listen(PORT);
 
   const logger = app.get(LoggerService);
+
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
 
   process.on('uncaughtException', (err) => {
     logger.error(`Uncaught Exception: ${err}`);

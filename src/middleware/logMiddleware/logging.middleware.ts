@@ -13,11 +13,9 @@ export class LoggingMiddleware implements NestMiddleware {
     const originalUrl = req.originalUrl;
     const query = req.query;
     const body = req.body;
-    // const userAgent = req.get('user-agent') || '';
 
     response.on('finish', () => {
       const statusCode = res.statusCode;
-      //   const length = res.get('content-length');
 
       const url = `${protocol}://${hostname}${originalUrl}`;
 

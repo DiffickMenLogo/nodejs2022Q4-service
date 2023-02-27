@@ -97,8 +97,8 @@ export class AlbumService {
     return 'Album deleted';
   }
 
-  async deleteArtistId(albumId: string): Promise<void> {
-    (await this.albumRepository.find({ where: { artistId: albumId } })).map(
+  async deleteArtistId(id: string): Promise<void> {
+    (await this.albumRepository.find({ where: { artistId: id } })).map(
       (album) => {
         album.artistId = null;
         this.albumRepository.save(album);

@@ -85,9 +85,6 @@ export class ArtistService {
     const artist = await this.artistRepository.findOne({
       where: { id: artistId },
     });
-    await this.artistRepository.delete(artistId);
-    await this.trackService.deleteArtistId(artistId);
-    await this.albumService.deleteArtistId(artistId);
 
     if (!artist) {
       throw new HttpException(
@@ -98,6 +95,9 @@ export class ArtistService {
         HttpStatus.NOT_FOUND,
       );
     }
+    await this.trackService.deleteArtistId(artistId);
+    await this.albumService.deleteArtistId(artistId);
+    await this.artistRepository.delete(artistId);
 
     return 'Artist deleted';
   }

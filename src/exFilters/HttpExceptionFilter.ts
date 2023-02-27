@@ -1,3 +1,4 @@
+import { LoggerService } from 'src/logger/logger.service';
 import {
   ArgumentsHost,
   Catch,
@@ -9,7 +10,8 @@ import { Request, Response } from 'express';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  constructor(private readonly logger: LoggerService) {}
+  catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const req = ctx.getRequest<Request>();
     const res = ctx.getResponse<Response>();
@@ -23,6 +25,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.message
         : 'Internal server error';
+
+    if (!(exception instanceof HttpException)) {
+      this.logger.error(`Internal server error stack: ${exception.stack}`);
+    }
 
     res.status(status).json({
       statusCode: status,
