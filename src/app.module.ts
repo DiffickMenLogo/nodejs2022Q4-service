@@ -1,3 +1,4 @@
+import { LoggingMiddlewareModule } from './middleware/logMiddleware/logging.middleware.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtMiddlewareModule } from './middleware/jwtMiddleware/jwt.middleware.module';
 import { AppController } from './app.controller';
@@ -33,6 +34,7 @@ import { AuthModule } from './auth/auth.module';
     DeleteFavoritesMiddlewareModule,
     AuthModule,
     JwtMiddlewareModule,
+    LoggingMiddlewareModule,
   ],
   controllers: [AppController],
   providers: [AppService],

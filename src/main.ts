@@ -1,3 +1,4 @@
+import { LoggerService } from './logger/logger.service';
 import { HttpExceptionFilter } from './exFilters/HttpExceptionFilter';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -7,6 +8,7 @@ import { dirname, join } from 'path';
 import { parse } from 'yaml';
 import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
+import { exit } from 'process';
 
 dotenv.config();
 
@@ -32,5 +34,16 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(PORT);
+
+  const logger = app.get(LoggerService);
+
+  process.on('uncaughtException', (err) => {
+    logger.error(`Uncaught Exception: ${err}`);
+    exit(1);
+  });
+
+  process.on('unhandledRejection', (reason, promiseT) => {
+    logger.error(`Unhandle at promise: ${promiseT}, Reason: ${reason}`);
+  });
 }
 bootstrap();
