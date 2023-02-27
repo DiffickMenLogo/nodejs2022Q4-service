@@ -1,3 +1,5 @@
+import { JwtModule } from '@nestjs/jwt';
+import { JwtMiddlewareModule } from './jwt.middleware.module';
 import { AppController } from './app.controller';
 import { DeleteFavoritesMiddlewareModule } from './deleteFavoritesMiddleware.module';
 import { FavoritesModule } from './favorites/favorites.module';
@@ -11,11 +13,16 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { dataSourceOptions } from './ormconfig';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '../.env',
+    }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1d' },
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     UserModule,
@@ -24,6 +31,8 @@ import { dataSourceOptions } from './ormconfig';
     AlbumModule,
     FavoritesModule,
     DeleteFavoritesMiddlewareModule,
+    AuthModule,
+    JwtMiddlewareModule,
   ],
   controllers: [AppController],
   providers: [AppService],
