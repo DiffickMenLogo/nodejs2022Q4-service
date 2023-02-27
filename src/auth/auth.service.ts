@@ -70,7 +70,7 @@ export class AuthService {
     //   }),
     // };
     return {
-      mockUserId: user.id,
+      id: user.id,
     };
   }
 

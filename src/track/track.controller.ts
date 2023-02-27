@@ -1,4 +1,3 @@
-import { DeleteFavoritesMiddleware } from './../deleteFavorites.middleware';
 import { UpdateTrackDto } from './dto/UpdateTrackDto';
 import { checkUUId } from './../utils/checkUUID';
 import { TrackService } from './track.service';

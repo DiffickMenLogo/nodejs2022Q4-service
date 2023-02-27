@@ -1,4 +1,4 @@
-import { FavoritesService } from './favorites/favorites.service';
+import { FavoritesService } from './../../favorites/favorites.service';
 import {
   Injectable,
   NestMiddleware,
