@@ -10,13 +10,14 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import { exit } from 'process';
 
-dotenv.config();
-
-const PORT = process.env.PORT || 4000;
-
 async function bootstrap() {
+  dotenv.config();
+  const PORT = process.env.PORT || 4000;
+
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalFilters(new HttpExceptionFilter());
+
   const source = await readFile(
     join(dirname(__dirname), 'doc/api.yaml'),
     'utf8',
