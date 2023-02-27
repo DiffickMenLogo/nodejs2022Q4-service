@@ -12,6 +12,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateTrackDto } from 'src/track/dto/CreateTrackDto';
 
@@ -21,30 +22,30 @@ export class TrackController {
 
   @Get()
   async getTrack() {
-    return this.trackService.getAllTracks();
+    return await this.trackService.getAllTracks();
   }
 
   @Get(':id')
   async getTrackById(@Param('id') id: string) {
     checkUUId(id);
-    return this.trackService.getTrackById(id);
+    return await this.trackService.getTrackById(id);
   }
 
   @Post()
-  createTrack(@Body() body: CreateTrackDto) {
-    return this.trackService.createTrack(body);
+  async createTrack(@Body() body: CreateTrackDto) {
+    return await this.trackService.createTrack(body);
   }
 
   @Put(':id')
-  updateTrack(@Param('id') id: string, @Body() body: UpdateTrackDto) {
+  async updateTrack(@Param('id') id: string, @Body() body: UpdateTrackDto) {
     checkUUId(id);
-    return this.trackService.updateTrack(id, body);
+    return await this.trackService.updateTrack(id, body);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteTrack(@Param('id') id: string) {
+  async deleteTrack(@Param('id') id: string) {
     checkUUId(id);
-    return this.trackService.deleteTrack(id);
+    return await this.trackService.deleteTrack(id);
   }
 }

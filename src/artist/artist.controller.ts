@@ -18,31 +18,31 @@ import { CreateArtistDto } from 'src/artist/dto/CreateArtistDto';
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
   @Get()
-  getAllArtists() {
-    return this.artistService.getAllArtists();
+  async getAllArtists() {
+    return await this.artistService.getAllArtists();
   }
 
   @Get(':id')
-  getArtistById(@Param('id') id: string) {
+  async getArtistById(@Param('id') id: string) {
     checkUUId(id);
-    return this.artistService.getArtistById(id);
+    return await this.artistService.getArtistById(id);
   }
 
   @Post()
-  createArtist(@Body() body: CreateArtistDto) {
-    return this.artistService.createArtist(body);
+  async createArtist(@Body() body: CreateArtistDto) {
+    return await this.artistService.createArtist(body);
   }
 
   @Put(':id')
-  updateArtist(@Param('id') id: string, @Body() body: UpdateArtistDto) {
+  async updateArtist(@Param('id') id: string, @Body() body: UpdateArtistDto) {
     checkUUId(id);
-    return this.artistService.updateArtist(id, body);
+    return await this.artistService.updateArtist(id, body);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteArtist(@Param('id') id: string) {
+  async deleteArtist(@Param('id') id: string) {
     checkUUId(id);
-    return this.artistService.deleteArtist(id);
+    return await this.artistService.deleteArtist(id);
   }
 }

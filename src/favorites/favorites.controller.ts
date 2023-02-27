@@ -16,41 +16,41 @@ export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
-  getAllFavorites() {
-    return this.favoritesService.getAllFavorites();
+  async getAllFavorites() {
+    return await this.favoritesService.getAllFavorites();
   }
 
   @Post('track/:id')
-  createFavoriteTrack(@Param('id') id: string) {
+  async createFavoriteTrack(@Param('id') id: string) {
     checkUUId(id);
-    return this.favoritesService.createFavoriteTrack(id);
+    return await this.favoritesService.createFavoriteTrack(id);
   }
   @Post('artist/:id')
-  createFavoriteArtist(@Param('id') id: string) {
+  async createFavoriteArtist(@Param('id') id: string) {
     checkUUId(id);
-    return this.favoritesService.createFavoriteArtist(id);
+    return await this.favoritesService.createFavoriteArtist(id);
   }
   @Post('album/:id')
-  createFavoriteAlbum(@Param('id') id: string) {
+  async createFavoriteAlbum(@Param('id') id: string) {
     checkUUId(id);
-    return this.favoritesService.createFavoriteAlbum(id);
+    return await this.favoritesService.createFavoriteAlbum(id);
   }
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteFavoriteTrack(@Param('id') id: string) {
+  async deleteFavoriteTrack(@Param('id') id: string) {
     checkUUId(id);
-    return this.favoritesService.deleteFavoriteTrack(id);
+    return await this.favoritesService.deleteFavoriteTrack(id);
   }
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteFavoriteArtist(@Param('id') id: string) {
+  async deleteFavoriteArtist(@Param('id') id: string) {
     checkUUId(id);
-    return this.favoritesService.deleteFavoriteArtist(id);
+    return await this.favoritesService.deleteFavoriteArtist(id);
   }
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteFavoriteAlbum(@Param('id') id: string) {
+  async deleteFavoriteAlbum(@Param('id') id: string) {
     checkUUId(id);
-    return this.favoritesService.deleteFavoriteAlbum(id);
+    return await this.favoritesService.deleteFavoriteAlbum(id);
   }
 }
