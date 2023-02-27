@@ -1,11 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 @Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   login: string;
 
   @Column()
@@ -23,5 +24,9 @@ export class UserEntity {
   toResponse() {
     const { id, login, version, createdAt, updatedAt } = this;
     return { id, login, version, createdAt, updatedAt };
+  }
+
+  async validatePassword(password: string) {
+    return await bcrypt.compare(password, this.password);
   }
 }

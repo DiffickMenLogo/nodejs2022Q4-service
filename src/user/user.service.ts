@@ -1,11 +1,17 @@
 import { UpdatePasswordDto } from './dto/UpdatePasswordDto';
 import { randomUUID } from 'crypto';
 import { CreateUserDto } from './dto/CreateUserDto';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserResponse } from 'src/types/types';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
+import { User, UserResponse } from 'src/types/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -36,10 +42,11 @@ export class UserService {
   }
 
   async createUser(user: CreateUserDto): Promise<UserResponse> {
+    await this.checkExistLogin(user.login);
     const newUser = {
       id: randomUUID(),
       login: user.login,
-      password: user.password,
+      password: await bcrypt.hash(user.password, 10),
       version: 1,
       createdAt: Date.now(),
       updatedAt: Date.now(),
@@ -89,5 +96,25 @@ export class UserService {
     }
     await this.userRepository.delete(userId);
     return 'User deleted';
+  }
+
+  async checkExistLogin(userLogin: string): Promise<void> {
+    const user = await this.userRepository.findOne({
+      where: { login: userLogin },
+    });
+    if (user) {
+      throw new HttpException(
+        {
+          error: 'A user with this login already exists',
+          status: HttpStatus.FORBIDDEN,
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+  }
+
+  async getUserByLogin(userLogin: string): Promise<UserEntity> {
+    const user = this.userRepository.findOne({ where: { login: userLogin } });
+    return user;
   }
 }

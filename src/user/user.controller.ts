@@ -20,30 +20,30 @@ export class UserController {
 
   @Get()
   async getUser() {
-    return this.userService.getAllUsers();
+    return await this.userService.getAllUsers();
   }
 
   @Get(':id')
   async getUserById(@Param('id') id: string) {
     checkUUId(id);
-    return this.userService.getUserById(id);
+    return await this.userService.getUserById(id);
   }
 
   @Post()
-  createUser(@Body() body: CreateUserDto) {
-    return this.userService.createUser(body);
+  async createUser(@Body() body: CreateUserDto) {
+    return await this.userService.createUser(body);
   }
 
   @Put(':id')
-  updateUser(@Param('id') id: string, @Body() body: UpdatePasswordDto) {
+  async updateUser(@Param('id') id: string, @Body() body: UpdatePasswordDto) {
     checkUUId(id);
-    return this.userService.updateUser(id, body);
+    return await this.userService.updateUser(id, body);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id') id: string) {
     checkUUId(id);
-    return this.userService.deleteUser(id);
+    return await this.userService.deleteUser(id);
   }
 }
